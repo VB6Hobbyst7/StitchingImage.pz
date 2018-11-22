@@ -86,7 +86,7 @@ namespace StitchingImageLib
         /// 多帧图像拼接
         /// </summary>
         /// <param name="imagesQueue">按照顺序排列的图像组</param>
-        /// <param name="Offset">拼接偏移量 (X21 Y21)  (X32 Y32) (X43 Y43.)..</param>
+        /// <param name="Offset">拼接偏移量 (X21 Y21)  (X31 Y31) (X41 Y41.)..</param>
         /// <returns></returns>
         public static Image<Gray, byte> StitchingImageQueue(List<Image<Gray, byte>> imagesQueue, Point[] Offset)
         {

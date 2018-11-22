@@ -20,16 +20,23 @@ namespace StitchingImage
         {
             InitializeComponent();
         }
-        string firstDataSet = @"First.txt";
-        string lastDataSet = @"Last.txt";
-         static string firstImageFile = @"first.bmp";
-        static string lastImageFile = @"last.bmp";
+        string _01_2_1DataSet = @"01_2_1.txt";
+        string _02_2_1DataSet = @"02_2_1.txt";
+        string _01_3_2DataSet = @"01_3_2.txt";
+        string _02_3_2DataSet = @"02_3_2.txt";
+        string _01_4_3DataSet = @"01_4_3.txt";
+        string _02_4_3DataSet = @"02_4_3.txt";
+
+        static string firstImageFile = @"01.bmp";
+        static string secondImageFile = @"02.bmp";
+        static string thirdImageFile = @"03.bmp";
+        static string fourthImageFile = @"04.bmp";
         double[,] FirstDataArray = new double[0,0];
         double[,] LastDataArray = new double[0, 0];
         Image<Gray, byte> firstImage = new Image<Gray, byte>(new Bitmap(firstImageFile));
-        Image<Gray, byte> lastImage = new Image<Gray, byte>(new Bitmap(lastImageFile));
-
-
+        Image<Gray, byte> secondImage = new Image<Gray, byte>(new Bitmap(secondImageFile));
+        Image<Gray, byte> thirdImage = new Image<Gray, byte>(new Bitmap(thirdImageFile));
+        Image<Gray, byte> fourthImage = new Image<Gray, byte>(new Bitmap(fourthImageFile));
         double[,] getDataFromTXT(string filename)
         {
             string[] dataStr = File.ReadAllLines(filename);
@@ -48,22 +55,42 @@ namespace StitchingImage
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            FirstDataArray = getDataFromTXT(firstDataSet);
-            LastDataArray = getDataFromTXT(lastDataSet);
-            double XOffset;
-            double YOffset;
-            StitchingImageTool.XYOffsetCalc(FirstDataArray, LastDataArray, out XOffset, out YOffset);
+            FirstDataArray = getDataFromTXT(_01_2_1DataSet);
+            LastDataArray = getDataFromTXT(_02_2_1DataSet);
+            double XOffset2_1;
+            double YOffset2_1;
+            StitchingImageTool.XYOffsetCalc(FirstDataArray, LastDataArray, out XOffset2_1, out YOffset2_1);
+
+            FirstDataArray = getDataFromTXT(_01_3_2DataSet);
+            LastDataArray = getDataFromTXT(_02_3_2DataSet);
+            double XOffset3_2;
+            double YOffset3_2;
+            StitchingImageTool.XYOffsetCalc(FirstDataArray, LastDataArray, out XOffset3_2, out YOffset3_2);
+
+
+            FirstDataArray = getDataFromTXT(_01_4_3DataSet);
+            LastDataArray = getDataFromTXT(_02_4_3DataSet);
+            double XOffset4_3;
+            double YOffset4_3;
+            StitchingImageTool.XYOffsetCalc(FirstDataArray, LastDataArray, out XOffset4_3, out YOffset4_3);
             //var res = StitchingImageTool.StitchingImage(firstImage, lastImage, XOffset, 0);
             //res.Save(@"C:\test.bmp");
             List<Image<Gray, byte>> imagesQueue = new List<Image<Gray, byte>>();
             imagesQueue.Add(firstImage);
-            imagesQueue.Add(lastImage);
-            Point[] points = new Point[] { new Point(0, 0), new Point((int)XOffset, (int)YOffset) };
+            imagesQueue.Add(secondImage);
+            imagesQueue.Add(thirdImage);
+            imagesQueue.Add(fourthImage);
+            ///
+            // Y 向标定精度太差 用0 代替
+
+            Point[] points = new Point[] { new Point(0, 0), new Point((int)XOffset2_1, (int)0) , new Point((int)(XOffset2_1+XOffset3_2), (int)YOffset3_2)
+                ,new Point((int)(XOffset2_1+XOffset3_2+XOffset4_3), (int)0)
+            };
             var res = StitchingImageTool.StitchingImageQueue(imagesQueue, points);
 
 
             imageBox1.Image = res;
-            richTextBox1.Text = $"{res.Width}+{res.Height}";
+            richTextBox1.Text = $"{YOffset2_1}+{YOffset3_2}+{YOffset4_3}";
 
 
 
